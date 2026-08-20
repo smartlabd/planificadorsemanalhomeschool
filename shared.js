@@ -21,7 +21,7 @@ const DEFAULT_CONFIG = {
   tagline: 'Comunidad Cristiana Clásica',
   footerLeft: 'Comunidad Cristiana Clásica LOS CHORROS',
   footerRight: 'Caracas – Venezuela – 2026-2027',
-  logoDataUrl: null,
+  logoDataUrl: 'https://hwcjchieqwqgnttccrrd.supabase.co/storage/v1/object/public/assets/a5b00649-3656-4b34-9015-5183797e235b/defaults/640a1c77-50e0-4e0b-985f-826f8c232ace.png',
 };
 
 function emptySubjectData(){
