@@ -49,6 +49,14 @@
   <!-- EDITOR -->
   <aside class="editor" id="editorPane">
 
+    <section class="panel panel-highlight">
+      <h2>Nombre de la sede</h2>
+      <p class="hint">Es el texto que aparece en grande en el encabezado del PDF (ej. "LOS CHORROS").</p>
+      <label>Nombre de la comunidad / sede
+        <input type="text" id="cfgCommunity">
+      </label>
+    </section>
+
     <section class="panel panel-logo">
       <h2>Logo de la sede</h2>
       <p class="hint">Se muestra fijo en la esquina superior derecha de la hoja, tal como en el diseño original.</p>
@@ -65,12 +73,9 @@
 
     <section class="panel" id="panelConfig" style="display:none">
       <h2>Configuración fija (encabezado / pie de página)</h2>
-      <p class="hint">Esto se aplica siempre igual en todas las semanas. Cámbialo solo si necesitas ajustar el nombre de la sede, ciclo o pie de página.</p>
+      <p class="hint">Esto se aplica siempre igual en todas las semanas. Cámbialo solo si necesitas ajustar el texto superior, ciclo o pie de página.</p>
       <label>Texto superior (kicker)
         <input type="text" id="cfgKicker">
-      </label>
-      <label>Nombre de la comunidad / sede
-        <input type="text" id="cfgCommunity">
       </label>
       <label>Ciclo
         <input type="text" id="cfgCycle">
@@ -109,6 +114,7 @@
 
   <!-- PREVIEW / PRINT SHEET -->
   <main class="preview-wrap">
+   <div class="sheet-frame" id="sheetFrame">
     <div class="sheet" id="sheet">
 
       <div class="sheet-header">
@@ -148,6 +154,7 @@
       </div>
 
     </div>
+   </div>
   </main>
 
 </div>

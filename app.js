@@ -355,12 +355,19 @@ document.getElementById('authPassword').addEventListener('keydown', (e)=>{
 });
 document.getElementById('btnLogout').addEventListener('click', ()=> sb.auth.signOut());
 
+let sheetFitWatcherStarted = false;
 async function bootApp(){
   document.getElementById('authScreen').classList.add('hidden');
   document.getElementById('appRoot').classList.remove('hidden');
   config = await loadConfig();
   current = emptyWeek();
   refreshAll();
+  if(!sheetFitWatcherStarted){
+    sheetFitWatcherStarted = true;
+    watchSheetFit('sheetFrame', 'sheet');
+  } else {
+    fitSheetToFrame('sheetFrame', 'sheet');
+  }
 }
 function showAuthScreen(){
   document.getElementById('authScreen').classList.remove('hidden');

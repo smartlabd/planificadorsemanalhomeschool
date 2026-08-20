@@ -5,6 +5,7 @@ if(raw){
   try{
     const payload = JSON.parse(raw);
     renderSheet(payload.config, payload.week);
+    watchSheetFit('sheetFrame', 'sheet');
   }catch(e){
     document.body.innerHTML = '<p style="padding:40px;font-family:sans-serif">No se pudo cargar la semana. Vuelve a la pestaña del planificador e intenta de nuevo con "Generar PDF".</p>';
   }

@@ -85,7 +85,7 @@ body{margin:0;background:var(--bg);color:#222;font-family:inherit;}
 .panel textarea{resize:vertical;min-height:60px;}
 .panel input[type=file]{margin-top:4px;font-size:12px;}
 
-.panel-logo{background:#eef2ff;border-color:#c6d2f5;}
+.panel-logo,.panel-highlight{background:#eef2ff;border-color:#c6d2f5;}
 .logo-row{display:flex;align-items:center;gap:12px;}
 .logo-preview{
   width:60px;height:60px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#fff;
@@ -116,11 +116,13 @@ body{margin:0;background:var(--bg);color:#222;font-family:inherit;}
 .subject-editor .checks label{display:flex;gap:5px;align-items:center;font-weight:400;margin:0;}
 
 /* ---------- sheet (preview + print) ---------- */
+.sheet-frame{flex-shrink:0;}
 .sheet{
   width:850px;flex-shrink:0;aspect-ratio:8.5/11;background:#fff;padding:34px 40px 26px;box-shadow:0 4px 24px rgba(0,0,0,.15);
   color:var(--navy);font-size:12.5px;line-height:1.4;
   display:flex;flex-direction:column;
   overflow-x:hidden;
+  transform-origin:top left;
 }
 .sheet-header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;min-width:0;}
 .sheet-header-text{min-width:0;overflow-wrap:anywhere;word-break:break-word;}
@@ -200,6 +202,33 @@ body{margin:0;background:var(--bg);color:#222;font-family:inherit;}
 .rte-editor p{margin:0 0 6px;}
 .rte-editor ul{margin:0 0 6px;padding-left:18px;}
 
+/* ---------- mobile ---------- */
+@media (max-width: 900px){
+  .topbar{padding:10px 12px;}
+  .topbar-title{width:100%;}
+  .topbar-title span{display:block;margin-top:2px;}
+  .topbar-actions{width:100%;}
+  .topbar-actions .btn{flex:1 1 auto;font-size:12px;padding:8px 10px;}
+  .dropdown{flex:1 1 auto;}
+  .dropdown .btn{width:100%;}
+
+  .layout{flex-direction:column;}
+  .editor{
+    width:100%;height:auto;max-height:none;overflow-y:visible;
+    border-right:none;border-bottom:1px solid var(--border);
+  }
+  .preview-wrap{
+    width:100%;height:auto;overflow:visible;padding:16px 12px;
+  }
+
+  .auth-card{padding:24px;}
+}
+
+@media (max-width: 480px){
+  .topbar-actions .btn{font-size:11px;padding:7px 8px;}
+  .panel{padding:12px;}
+}
+
 /* ---------- print ---------- */
 @media print{
   @page{size:letter portrait;margin:10mm;}
@@ -207,10 +236,12 @@ body{margin:0;background:var(--bg);color:#222;font-family:inherit;}
   body *{visibility:hidden;}
   .sheet,.sheet *{visibility:visible;}
   .layout,.preview-wrap{display:block;overflow:visible;height:auto;padding:0;margin:0;}
+  .sheet-frame{width:auto !important;height:auto !important;}
   .sheet{
     position:absolute;top:0;left:0;
     width:190mm;max-width:190mm;aspect-ratio:auto;height:auto;
     box-shadow:none;padding:0;
+    transform:none !important;
   }
   .topbar,.editor{display:none;}
 }

@@ -188,3 +188,34 @@ function renderSheet(config, week){
   });
   subjEl.innerHTML = html;
 }
+
+// The sheet is a fixed-size 850×1100 "page" (see .sheet in styles.css) so its
+// internal layout (fonts, icons, grid) never has to reflow. On small screens
+// it's scaled down as a whole via CSS transform, like a page thumbnail, so it
+// always fits the viewport width with zero risk of internal overflow.
+const SHEET_WIDTH = 850;
+const SHEET_HEIGHT = SHEET_WIDTH * (11 / 8.5); // matches the sheet's fixed 8.5:11 aspect-ratio
+function fitSheetToFrame(frameId, sheetId){
+  const frame = document.getElementById(frameId);
+  const sheet = document.getElementById(sheetId);
+  if(!frame || !sheet) return;
+  const container = frame.parentElement;
+  const cs = getComputedStyle(container);
+  const paddingX = parseFloat(cs.paddingLeft || 0) + parseFloat(cs.paddingRight || 0);
+  const available = container.clientWidth - paddingX;
+  const scale = Math.min(1, available / SHEET_WIDTH);
+  sheet.style.transform = scale < 1 ? `scale(${scale})` : '';
+  frame.style.width = (SHEET_WIDTH * scale) + 'px';
+  frame.style.height = (SHEET_HEIGHT * scale) + 'px';
+}
+function watchSheetFit(frameId, sheetId){
+  const run = () => fitSheetToFrame(frameId, sheetId);
+  run();
+  window.addEventListener('resize', run);
+  window.addEventListener('orientationchange', run);
+  const frame = document.getElementById(frameId);
+  if(frame && frame.parentElement && window.ResizeObserver){
+    new ResizeObserver(run).observe(frame.parentElement);
+  }
+  return run;
+}
