@@ -375,7 +375,20 @@ function showAuthScreen(){
   document.getElementById('authPassword').value = '';
 }
 
+// onAuthStateChange fires not just on login, but also on background token
+// refreshes, tab focus, etc. — any of those carries a valid session too, so
+// without this guard bootApp() (which wipes `current`) would run again mid-
+// edit and silently discard unsaved work every time Supabase refreshes the
+// token in the background.
+let appBooted = false;
 sb.auth.onAuthStateChange((_event, session)=>{
-  if(session) bootApp();
-  else showAuthScreen();
+  if(session){
+    if(!appBooted){
+      appBooted = true;
+      bootApp();
+    }
+  } else {
+    appBooted = false;
+    showAuthScreen();
+  }
 });
