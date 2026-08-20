@@ -17,7 +17,10 @@
       <input type="email" id="authEmail" autocomplete="username">
     </label>
     <label>Contraseña
-      <input type="password" id="authPassword" autocomplete="current-password">
+      <div class="password-field">
+        <input type="password" id="authPassword" autocomplete="current-password">
+        <button type="button" class="password-toggle" data-target="authPassword" aria-label="Mostrar contraseña">👁</button>
+      </div>
     </label>
     <button id="btnLogin" class="btn btn-primary" style="width:100%">Iniciar sesión</button>
     <p id="authError" class="auth-error"></p>
@@ -30,10 +33,16 @@
     <h1>Nueva contraseña</h1>
     <p>Escribe la contraseña nueva para tu cuenta.</p>
     <label>Contraseña nueva
-      <input type="password" id="recoveryPassword" autocomplete="new-password">
+      <div class="password-field">
+        <input type="password" id="recoveryPassword" autocomplete="new-password">
+        <button type="button" class="password-toggle" data-target="recoveryPassword" aria-label="Mostrar contraseña">👁</button>
+      </div>
     </label>
     <label>Confirmar contraseña
-      <input type="password" id="recoveryPassword2" autocomplete="new-password">
+      <div class="password-field">
+        <input type="password" id="recoveryPassword2" autocomplete="new-password">
+        <button type="button" class="password-toggle" data-target="recoveryPassword2" aria-label="Mostrar contraseña">👁</button>
+      </div>
     </label>
     <button id="btnRecoverySave" class="btn btn-primary" style="width:100%">Guardar contraseña</button>
     <p id="recoveryError" class="auth-error"></p>
