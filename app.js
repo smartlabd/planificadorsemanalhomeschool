@@ -371,17 +371,58 @@ async function bootApp(){
 }
 function showAuthScreen(){
   document.getElementById('authScreen').classList.remove('hidden');
+  document.getElementById('recoveryScreen').classList.add('hidden');
   document.getElementById('appRoot').classList.add('hidden');
   document.getElementById('authPassword').value = '';
 }
+function showRecoveryScreen(){
+  document.getElementById('authScreen').classList.add('hidden');
+  document.getElementById('recoveryScreen').classList.remove('hidden');
+  document.getElementById('appRoot').classList.add('hidden');
+}
+
+async function doSetNewPassword(){
+  const pw1 = document.getElementById('recoveryPassword').value;
+  const pw2 = document.getElementById('recoveryPassword2').value;
+  const errEl = document.getElementById('recoveryError');
+  const okEl = document.getElementById('recoverySuccess');
+  errEl.textContent = '';
+  okEl.classList.add('hidden');
+  if(pw1.length < 6){ errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; return; }
+  if(pw1 !== pw2){ errEl.textContent = 'Las contraseñas no coinciden.'; return; }
+  const btn = document.getElementById('btnRecoverySave');
+  btn.disabled = true;
+  btn.textContent = 'Guardando…';
+  const { error } = await sb.auth.updateUser({ password: pw1 });
+  btn.disabled = false;
+  btn.textContent = 'Guardar contraseña';
+  if(error){ errEl.textContent = 'No se pudo actualizar la contraseña. Pide un nuevo enlace e intenta de nuevo.'; return; }
+  okEl.classList.remove('hidden');
+  document.getElementById('recoveryPassword').value = '';
+  document.getElementById('recoveryPassword2').value = '';
+  setTimeout(()=>{
+    document.getElementById('recoveryScreen').classList.add('hidden');
+    if(!appBooted){ appBooted = true; bootApp(); }
+  }, 1200);
+}
+document.getElementById('btnRecoverySave').addEventListener('click', doSetNewPassword);
+document.getElementById('recoveryPassword2').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter') doSetNewPassword();
+});
 
 // onAuthStateChange fires not just on login, but also on background token
 // refreshes, tab focus, etc. — any of those carries a valid session too, so
 // without this guard bootApp() (which wipes `current`) would run again mid-
 // edit and silently discard unsaved work every time Supabase refreshes the
-// token in the background.
+// token in the background. PASSWORD_RECOVERY also carries a session (from
+// the emailed link) but must show the "set new password" screen, not boot
+// straight into the app.
 let appBooted = false;
-sb.auth.onAuthStateChange((_event, session)=>{
+sb.auth.onAuthStateChange((event, session)=>{
+  if(event === 'PASSWORD_RECOVERY'){
+    showRecoveryScreen();
+    return;
+  }
   if(session){
     if(!appBooted){
       appBooted = true;

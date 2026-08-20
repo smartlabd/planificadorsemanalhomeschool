@@ -24,6 +24,23 @@
   </div>
 </div>
 
+<!-- SET NEW PASSWORD (from recovery email link) -->
+<div id="recoveryScreen" class="auth-screen hidden">
+  <div class="auth-card">
+    <h1>Nueva contraseña</h1>
+    <p>Escribe la contraseña nueva para tu cuenta.</p>
+    <label>Contraseña nueva
+      <input type="password" id="recoveryPassword" autocomplete="new-password">
+    </label>
+    <label>Confirmar contraseña
+      <input type="password" id="recoveryPassword2" autocomplete="new-password">
+    </label>
+    <button id="btnRecoverySave" class="btn btn-primary" style="width:100%">Guardar contraseña</button>
+    <p id="recoveryError" class="auth-error"></p>
+    <p id="recoverySuccess" class="auth-success hidden">Contraseña actualizada. Entrando…</p>
+  </div>
+</div>
+
 <div id="appRoot" class="hidden">
 
 <header class="topbar">
