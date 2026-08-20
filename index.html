@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planificador Semanal · Foundations</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="authScreen" class="auth-screen">
+  <div class="auth-card">
+    <h1>Planificador Semanal</h1>
+    <p>Inicia sesión para continuar</p>
+    <label>Correo
+      <input type="email" id="authEmail" autocomplete="username">
+    </label>
+    <label>Contraseña
+      <input type="password" id="authPassword" autocomplete="current-password">
+    </label>
+    <button id="btnLogin" class="btn btn-primary" style="width:100%">Iniciar sesión</button>
+    <p id="authError" class="auth-error"></p>
+  </div>
+</div>
+
+<div id="appRoot" class="hidden">
+
+<header class="topbar">
+  <div class="topbar-title">
+    <strong>Planificador Semanal</strong>
+    <span>Programa de Memorización de Foundations</span>
+  </div>
+  <div class="topbar-actions">
+    <div class="dropdown">
+      <button id="btnSemanas" class="btn btn-ghost">Semanas guardadas ▾</button>
+      <div id="menuSemanas" class="dropdown-menu hidden"></div>
+    </div>
+    <button id="btnNueva" class="btn btn-ghost">＋ Nueva semana</button>
+    <button id="btnConfig" class="btn btn-ghost">⚙ Config. fija</button>
+    <button id="btnGuardar" class="btn btn-secondary">Guardar semana</button>
+    <button id="btnPDF" class="btn btn-primary">Generar PDF</button>
+    <button id="btnLogout" class="btn btn-ghost">Cerrar sesión</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- EDITOR -->
+  <aside class="editor" id="editorPane">
+
+    <section class="panel panel-logo">
+      <h2>Logo de la sede</h2>
+      <p class="hint">Se muestra fijo en la esquina superior derecha de la hoja, tal como en el diseño original.</p>
+      <div class="logo-row">
+        <div class="logo-preview" id="logoPreview"></div>
+        <div class="logo-actions">
+          <label class="btn btn-secondary small file-btn">Subir logo
+            <input type="file" id="cfgLogo" accept="image/*">
+          </label>
+          <button class="btn btn-outline small" id="cfgLogoClear">Quitar logo</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panelConfig" style="display:none">
+      <h2>Configuración fija (encabezado / pie de página)</h2>
+      <p class="hint">Esto se aplica siempre igual en todas las semanas. Cámbialo solo si necesitas ajustar el nombre de la sede, ciclo o pie de página.</p>
+      <label>Texto superior (kicker)
+        <input type="text" id="cfgKicker">
+      </label>
+      <label>Nombre de la comunidad / sede
+        <input type="text" id="cfgCommunity">
+      </label>
+      <label>Ciclo
+        <input type="text" id="cfgCycle">
+      </label>
+      <label>Subtítulo (bajo el título)
+        <input type="text" id="cfgTagline">
+      </label>
+      <label>Pie de página · izquierda
+        <input type="text" id="cfgFooterLeft">
+      </label>
+      <label>Pie de página · derecha
+        <input type="text" id="cfgFooterRight">
+      </label>
+    </section>
+
+    <section class="panel">
+      <h2>Semana</h2>
+      <label>Número de semana
+        <input type="number" id="weekNumber" min="1" max="99" value="1">
+      </label>
+    </section>
+
+    <section class="panel">
+      <h2>Línea de tiempo / Timeline</h2>
+      <p class="hint">Agrega o quita eventos. Cada uno lleva una imagen y su texto en español e inglés.</p>
+      <div id="timelineEditor"></div>
+      <button class="btn btn-outline small" id="btnAddTimeline">＋ Agregar evento</button>
+    </section>
+
+    <section class="panel">
+      <h2>Materias</h2>
+      <div id="subjectsEditor"></div>
+    </section>
+
+  </aside>
+
+  <!-- PREVIEW / PRINT SHEET -->
+  <main class="preview-wrap">
+    <div class="sheet" id="sheet">
+
+      <div class="sheet-header">
+        <div class="sheet-header-text">
+          <div class="kicker" id="pv-kicker"></div>
+          <h1 class="sheet-title">
+            <span id="pv-community"></span>
+            <span class="title-accent"> - <span id="pv-cycle"></span> - <span id="pv-week"></span></span>
+          </h1>
+          <div class="tagline" id="pv-tagline"></div>
+        </div>
+        <div class="sheet-logo" id="pv-logo"></div>
+      </div>
+
+      <div class="rule rule-gold"></div>
+
+      <div class="timeline-section">
+        <div class="section-heading">
+          <span class="icon">🕘</span> LÍNEA DE TIEMPO / TIMELINE
+        </div>
+        <div class="timeline-row" id="pv-timeline"></div>
+      </div>
+
+      <div class="rule rule-gold"></div>
+
+      <div class="subjects-grid" id="pv-subjects"></div>
+
+      <div class="flag-bars">
+        <div class="stripe yellow"></div>
+        <div class="stripe blue"></div>
+        <div class="stripe red"></div>
+      </div>
+
+      <div class="sheet-footer">
+        <span id="pv-footer-left"></span>
+        <span id="pv-footer-right"></span>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script src="shared.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

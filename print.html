@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vista previa · Planificador Semanal</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-title">
+    <strong>Vista previa del PDF</strong>
+    <span>Revisa la hoja y luego imprime o guarda como PDF</span>
+  </div>
+  <div class="topbar-actions">
+    <button id="btnClose" class="btn btn-ghost">✕ Cerrar pestaña</button>
+    <button id="btnPrint" class="btn btn-primary">🖨 Imprimir / Guardar PDF</button>
+  </div>
+</header>
+
+<div class="layout">
+  <main class="preview-wrap" style="width:100%;">
+    <div class="sheet" id="sheet">
+
+      <div class="sheet-header">
+        <div class="sheet-header-text">
+          <div class="kicker" id="pv-kicker"></div>
+          <h1 class="sheet-title">
+            <span id="pv-community"></span>
+            <span class="title-accent"> - <span id="pv-cycle"></span> - <span id="pv-week"></span></span>
+          </h1>
+          <div class="tagline" id="pv-tagline"></div>
+        </div>
+        <div class="sheet-logo" id="pv-logo"></div>
+      </div>
+
+      <div class="rule rule-gold"></div>
+
+      <div class="timeline-section">
+        <div class="section-heading">
+          <span class="icon">🕘</span> LÍNEA DE TIEMPO / TIMELINE
+        </div>
+        <div class="timeline-row" id="pv-timeline"></div>
+      </div>
+
+      <div class="rule rule-gold"></div>
+
+      <div class="subjects-grid" id="pv-subjects"></div>
+
+      <div class="flag-bars">
+        <div class="stripe yellow"></div>
+        <div class="stripe blue"></div>
+        <div class="stripe red"></div>
+      </div>
+
+      <div class="sheet-footer">
+        <span id="pv-footer-left"></span>
+        <span id="pv-footer-right"></span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="shared.js"></script>
+<script src="print.js"></script>
+</body>
+</html>
