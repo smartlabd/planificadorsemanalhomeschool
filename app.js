@@ -294,6 +294,11 @@ document.getElementById('btnPDF').addEventListener('click', ()=>{
   window.open('print.html', '_blank');
 });
 
+document.getElementById('btnFlashcards').addEventListener('click', ()=>{
+  localStorage.setItem(PRINT_PAYLOAD_KEY, JSON.stringify({ config, week: current }));
+  window.open('flashcards.html', '_blank');
+});
+
 document.getElementById('btnConfig').addEventListener('click', ()=>{
   const panel = document.getElementById('panelConfig');
   panel.style.display = panel.style.display === 'none' ? 'block' : 'none';

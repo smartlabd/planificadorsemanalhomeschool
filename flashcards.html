@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards · Planificador Semanal</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-title">
+    <strong>Flashcards de la semana</strong>
+    <span>Una tarjeta por materia, con el contenido que cargaste</span>
+  </div>
+  <div class="topbar-actions">
+    <button id="btnClose" class="btn btn-ghost">✕ Cerrar pestaña</button>
+    <button id="btnPrint" class="btn btn-primary">🖨 Imprimir / Guardar PDF</button>
+  </div>
+</header>
+
+<div class="flashcards-page">
+  <div class="flashcard-grid" id="flashcardGrid"></div>
+</div>
+
+<script src="shared.js"></script>
+<script src="flashcards.js"></script>
+</body>
+</html>
