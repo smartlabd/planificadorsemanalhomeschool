@@ -107,10 +107,26 @@ function looksLikeHtml(str){
   return /<[a-z][\s\S]*>/i.test(str || '');
 }
 
-const RTE_ALLOWED_TAGS = new Set(['B','STRONG','I','EM','U','BR','P','UL','OL','LI','DIV','TABLE','TBODY','THEAD','TR','TD','TH']);
+const RTE_ALLOWED_TAGS = new Set(['B','STRONG','I','EM','U','BR','P','UL','OL','LI','DIV','SPAN','TABLE','TBODY','THEAD','TR','TD','TH']);
+
+// SPAN is only allowed to carry a "style" attribute, and only these two
+// properties within it (font size / color from the toolbar) — everything
+// else (onclick, id, arbitrary CSS, etc.) is stripped.
+const RTE_ALLOWED_STYLE_PROPS = ['color', 'font-size'];
+function sanitizeStyle(styleText){
+  return (styleText || '').split(';').map(decl=>{
+    const idx = decl.indexOf(':');
+    if(idx === -1) return null;
+    const prop = decl.slice(0, idx).trim().toLowerCase();
+    const value = decl.slice(idx + 1).trim();
+    if(!RTE_ALLOWED_STYLE_PROPS.includes(prop)) return null;
+    if(!/^[a-zA-Z0-9#().,%\s-]+$/.test(value)) return null;
+    return `${prop}: ${value}`;
+  }).filter(Boolean).join('; ');
+}
 
 // Strips any tag/attribute not in the whitelist, keeping only basic text formatting
-// (bold/italic/underline/lists) produced by the rich text editor's toolbar.
+// (bold/italic/underline/lists/tables/font size/color) produced by the toolbar.
 function sanitizeHtml(html){
   const tmp = document.createElement('div');
   tmp.innerHTML = html || '';
@@ -121,7 +137,9 @@ function sanitizeHtml(html){
           while(child.firstChild) node.insertBefore(child.firstChild, child);
           node.removeChild(child);
         } else {
+          const keptStyle = child.tagName === 'SPAN' ? sanitizeStyle(child.getAttribute('style')) : '';
           [...child.attributes].forEach(a => child.removeAttribute(a.name));
+          if(keptStyle) child.setAttribute('style', keptStyle);
           clean(child);
         }
       } else if(child.nodeType !== 3){

@@ -20,6 +20,36 @@ function insertTableAt(editor){
   document.execCommand('insertHTML', false, html);
 }
 
+// Font size / color helpers: wrap the current selection in a <span> with the
+// given inline CSS property, instead of relying on execCommand('fontSize'/
+// 'foreColor'), which produce inconsistent, hard-to-sanitize markup (legacy
+// <font> tags) across browsers.
+function captureSelection(editor){
+  const sel = window.getSelection();
+  if(sel.rangeCount === 0) return null;
+  const range = sel.getRangeAt(0);
+  if(range.collapsed || !editor.contains(range.commonAncestorContainer)) return null;
+  return range.cloneRange();
+}
+function restoreSelection(range){
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+function applyInlineStyle(cssProp, value){
+  const sel = window.getSelection();
+  if(sel.rangeCount === 0 || sel.isCollapsed) return;
+  const range = sel.getRangeAt(0);
+  const span = document.createElement('span');
+  span.style[cssProp] = value;
+  span.appendChild(range.extractContents());
+  range.insertNode(span);
+  sel.removeAllRanges();
+  const newRange = document.createRange();
+  newRange.selectNodeContents(span);
+  sel.addRange(newRange);
+}
+
 // ---------- state ----------
 let config = { ...DEFAULT_CONFIG };
 let current = emptyWeek();
@@ -173,6 +203,15 @@ function renderSubjectsEditor(){
         <button type="button" class="rte-btn bullet" data-cmd="insertUnorderedList" title="Lista con viñetas">• Lista</button>
         <button type="button" class="rte-btn bullet" data-cmd="insertOrderedList" title="Lista numerada">1. Lista</button>
         <button type="button" class="rte-btn bullet" data-cmd="insertTable" title="Insertar tabla sin bordes">▦ Tabla</button>
+        <select class="rte-select rte-size" data-id="${meta.id}" title="Selecciona el texto y elige un tamaño">
+          <option value="">Tamaño</option>
+          <option value="10px">Pequeño</option>
+          <option value="13px">Normal</option>
+          <option value="16px">Grande</option>
+          <option value="20px">Muy grande</option>
+          <option value="26px">Enorme</option>
+        </select>
+        <input type="color" class="rte-color" data-id="${meta.id}" title="Selecciona el texto y elige un color" value="#1b2a4a">
       </div>
       <div class="rte-editor sj-content" contenteditable="true" data-id="${meta.id}" data-placeholder="Escribe el contenido...">${contentToHtml(data.content)}</div>
       <label>Referencia / nota (opcional)
@@ -208,6 +247,31 @@ function renderSubjectsEditor(){
       } else {
         document.execCommand(btn.dataset.cmd, false, null);
       }
+      current.subjects[id].content = sanitizeHtml(editor.innerHTML);
+      renderPreview();
+    });
+  });
+  // Font size / color: a <select> or <input type=color> steals focus (and
+  // therefore the editor's text selection) the moment it's interacted with,
+  // so the selection has to be captured on mousedown — before that happens —
+  // and restored right before applying the style on change.
+  el.querySelectorAll('.rte-size, .rte-color').forEach(ctrl=>{
+    let savedRange = null;
+    ctrl.addEventListener('mousedown', ()=>{
+      const editor = el.querySelector(`.sj-content[data-id="${ctrl.dataset.id}"]`);
+      savedRange = captureSelection(editor);
+    });
+    ctrl.addEventListener('change', ()=>{
+      const id = ctrl.dataset.id;
+      const editor = el.querySelector(`.sj-content[data-id="${id}"]`);
+      const cssProp = ctrl.classList.contains('rte-size') ? 'fontSize' : 'color';
+      if(cssProp === 'fontSize' && !ctrl.value) return;
+      if(!savedRange){ alert('Selecciona primero el texto que quieres cambiar.'); return; }
+      editor.focus();
+      restoreSelection(savedRange);
+      applyInlineStyle(cssProp, ctrl.value);
+      savedRange = null;
+      if(ctrl.tagName === 'SELECT') ctrl.value = '';
       current.subjects[id].content = sanitizeHtml(editor.innerHTML);
       renderPreview();
     });

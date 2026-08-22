@@ -211,13 +211,21 @@ body{margin:0;background:var(--bg);color:#222;font-family:inherit;}
 .sheet-footer span:first-child{font-weight:800;}
 
 /* ---------- rich text editor (subject content) ---------- */
-.rte-toolbar{display:flex;gap:4px;margin-top:4px;}
+.rte-toolbar{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;}
 .rte-btn{
   width:28px;height:26px;border:1px solid var(--border);border-radius:5px;background:#fff;
   cursor:pointer;font-size:13px;color:#333;line-height:1;
 }
 .rte-btn:hover{background:#eef1f6;}
 .rte-btn.bullet{width:auto;padding:0 8px;font-size:11px;}
+.rte-select{
+  height:26px;border:1px solid var(--border);border-radius:5px;background:#fff;
+  cursor:pointer;font-size:11px;color:#333;padding:0 4px;
+}
+.rte-color{
+  width:26px;height:26px;border:1px solid var(--border);border-radius:5px;background:#fff;
+  cursor:pointer;padding:2px;
+}
 .rte-editor{
   width:100%;margin-top:4px;padding:8px;border:1px solid var(--border);border-radius:6px;
   font-size:13px;font-family:inherit;min-height:60px;background:#fff;overflow-wrap:anywhere;
