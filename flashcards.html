@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Flashcards · Planificador Semanal</title>
 <link rel="stylesheet" href="styles.css">
+<style>
+  /* Each flashcard prints at an exact physical size (10cm × 7cm), so the
+     page goes landscape — two 10cm columns don't fit on a portrait letter
+     page, but fit comfortably in landscape with room for a gap. */
+  @media print{
+    @page{size:letter landscape;margin:10mm;}
+    .flashcard-grid{grid-template-columns:10cm 10cm;gap:8mm;justify-content:center;}
+    .flashcard{width:10cm;height:7cm;min-height:0;overflow:hidden;}
+  }
+</style>
 </head>
 <body>
 

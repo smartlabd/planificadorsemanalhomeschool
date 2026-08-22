@@ -2,6 +2,24 @@
 const PRINT_PAYLOAD_KEY = 'foundations_print_payload';
 const ASSETS_BUCKET = 'assets';
 
+// Inserts a borderless table at the cursor. No inline styles are used because
+// sanitizeHtml() strips all attributes from allowed tags — the borderless
+// look comes purely from the global table CSS in styles.css.
+function insertTableAt(editor){
+  const rowsInput = prompt('¿Cuántas filas?', '3');
+  if(rowsInput === null) return;
+  const colsInput = prompt('¿Cuántas columnas?', '3');
+  if(colsInput === null) return;
+  const rows = Math.min(20, Math.max(1, parseInt(rowsInput, 10) || 1));
+  const cols = Math.min(10, Math.max(1, parseInt(colsInput, 10) || 1));
+  let html = '<table>';
+  for(let r = 0; r < rows; r++){
+    html += '<tr>' + '<td>&nbsp;</td>'.repeat(cols) + '</tr>';
+  }
+  html += '</table><p><br></p>';
+  document.execCommand('insertHTML', false, html);
+}
+
 // ---------- state ----------
 let config = { ...DEFAULT_CONFIG };
 let current = emptyWeek();
@@ -153,6 +171,8 @@ function renderSubjectsEditor(){
         <button type="button" class="rte-btn" data-cmd="italic" title="Cursiva"><i>K</i></button>
         <button type="button" class="rte-btn" data-cmd="underline" title="Subrayado"><u>S</u></button>
         <button type="button" class="rte-btn bullet" data-cmd="insertUnorderedList" title="Lista con viñetas">• Lista</button>
+        <button type="button" class="rte-btn bullet" data-cmd="insertOrderedList" title="Lista numerada">1. Lista</button>
+        <button type="button" class="rte-btn bullet" data-cmd="insertTable" title="Insertar tabla sin bordes">▦ Tabla</button>
       </div>
       <div class="rte-editor sj-content" contenteditable="true" data-id="${meta.id}" data-placeholder="Escribe el contenido...">${contentToHtml(data.content)}</div>
       <label>Referencia / nota (opcional)
@@ -183,7 +203,11 @@ function renderSubjectsEditor(){
       const id = btn.parentElement.dataset.id;
       const editor = el.querySelector(`.sj-content[data-id="${id}"]`);
       editor.focus();
-      document.execCommand(btn.dataset.cmd, false, null);
+      if(btn.dataset.cmd === 'insertTable'){
+        insertTableAt(editor);
+      } else {
+        document.execCommand(btn.dataset.cmd, false, null);
+      }
       current.subjects[id].content = sanitizeHtml(editor.innerHTML);
       renderPreview();
     });

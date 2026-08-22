@@ -29,5 +29,7 @@ if(raw){
   document.body.innerHTML = '<p style="padding:40px;font-family:sans-serif">No hay datos para mostrar. Vuelve a la pestaña del planificador e intenta de nuevo con "Flashcards".</p>';
 }
 
-document.getElementById('btnPrint').addEventListener('click', ()=> window.print());
-document.getElementById('btnClose').addEventListener('click', ()=> window.close());
+const btnPrint = document.getElementById('btnPrint');
+const btnClose = document.getElementById('btnClose');
+if(btnPrint) btnPrint.addEventListener('click', ()=> window.print());
+if(btnClose) btnClose.addEventListener('click', ()=> window.close());

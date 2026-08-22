@@ -107,7 +107,7 @@ function looksLikeHtml(str){
   return /<[a-z][\s\S]*>/i.test(str || '');
 }
 
-const RTE_ALLOWED_TAGS = new Set(['B','STRONG','I','EM','U','BR','P','UL','OL','LI','DIV']);
+const RTE_ALLOWED_TAGS = new Set(['B','STRONG','I','EM','U','BR','P','UL','OL','LI','DIV','TABLE','TBODY','THEAD','TR','TD','TH']);
 
 // Strips any tag/attribute not in the whitelist, keeping only basic text formatting
 // (bold/italic/underline/lists) produced by the rich text editor's toolbar.
