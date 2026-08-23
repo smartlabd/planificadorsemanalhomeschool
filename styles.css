@@ -286,6 +286,17 @@ body{margin:0;background:var(--bg);color:#222;font-family:inherit;}
 .flashcard-content li{font-size:13px;color:#333;line-height:1.45;}
 .flashcard-ref{font-size:12px;font-weight:700;color:#333;margin-top:4px;}
 
+/* position:fixed keeps it pinned to the viewport on screen, and — the same
+   trick used for print headers/footers — makes it repeat on every printed
+   page instead of appearing only once at the end of the content. */
+.flashcards-watermark{
+  position:fixed;bottom:8mm;right:8mm;
+  display:flex;align-items:center;gap:6px;
+  opacity:.7;font-size:11px;color:#555;font-style:italic;
+  pointer-events:none;
+}
+.flashcards-watermark img{height:18px;width:auto;display:block;}
+
 @media (max-width: 600px){
   .flashcard-grid{grid-template-columns:7cm;}
 }
@@ -297,6 +308,7 @@ body{margin:0;background:var(--bg);color:#222;font-family:inherit;}
   body *{visibility:hidden;}
   .sheet,.sheet *{visibility:visible;}
   .flashcard-grid,.flashcard-grid *{visibility:visible;}
+  .flashcards-watermark,.flashcards-watermark *{visibility:visible;}
   .layout,.preview-wrap{display:block;overflow:visible;height:auto;padding:0;margin:0;}
   .sheet-frame{width:auto !important;height:auto !important;}
   .sheet{
