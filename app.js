@@ -456,6 +456,26 @@ document.getElementById('btnLogin').addEventListener('click', doLogin);
 document.getElementById('authPassword').addEventListener('keydown', (e)=>{
   if(e.key === 'Enter') doLogin();
 });
+
+async function doForgotPassword(){
+  const email = document.getElementById('authEmail').value.trim();
+  const errEl = document.getElementById('authError');
+  const sentEl = document.getElementById('authRecoverySent');
+  errEl.textContent = '';
+  sentEl.classList.add('hidden');
+  if(!email){ errEl.textContent = 'Escribe tu correo arriba primero.'; return; }
+  const btn = document.getElementById('btnForgotPassword');
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = 'Enviando…';
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+  btn.disabled = false;
+  btn.textContent = originalText;
+  if(error){ errEl.textContent = 'No se pudo enviar el correo. Intenta de nuevo.'; return; }
+  sentEl.classList.remove('hidden');
+}
+document.getElementById('btnForgotPassword').addEventListener('click', doForgotPassword);
+
 document.getElementById('btnLogout').addEventListener('click', ()=> sb.auth.signOut());
 
 let sheetFitWatcherStarted = false;
