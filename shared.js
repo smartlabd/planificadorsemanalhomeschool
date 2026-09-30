@@ -198,7 +198,10 @@ function renderSheet(config, week){
         ${data.label ? `<div class="subject-label">${escapeHtml(data.label)}</div>` : ''}
         <div class="subject-content">${contentToHtml(data.content)}</div>
         ${data.ref ? `<div class="subject-ref">${escapeHtml(data.ref)}</div>` : ''}
-        <div class="subject-status">Contenido armado<span class="dot ${data.armado?'on':''}"></span>Contenido enseñado<span class="dot ${data.ensenado?'on':''}"></span></div>
+        <div class="subject-status">
+          <span class="status-item"><span class="status-text">Contenido armado</span><span class="dot ${data.armado?'on':''}"></span></span>
+          <span class="status-item"><span class="status-text">Contenido enseñado</span><span class="dot ${data.ensenado?'on':''}"></span></span>
+        </div>
       </div>
     `;
     if(meta.afterDivider === 'purple') html += `<div class="row-divider-purple"></div>`;
