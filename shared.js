@@ -240,3 +240,31 @@ function watchSheetFit(frameId, sheetId){
   }
   return run;
 }
+
+// Letter portrait with 10mm margins leaves 259.4mm of height; keep a little
+// safety so rounding never pushes the last row onto a second page.
+const PRINT_MAX_HEIGHT_MM = 255;
+let printFitSaved = null;
+window.addEventListener('beforeprint', ()=>{
+  const sheet = document.getElementById('sheet');
+  if(!sheet) return;
+  printFitSaved = { width: sheet.style.width, height: sheet.style.height, aspect: sheet.style.aspectRatio, transform: sheet.style.transform, zoom: sheet.style.zoom };
+  sheet.style.transform = 'none';
+  sheet.style.aspectRatio = 'auto';
+  sheet.style.width = '190mm';
+  sheet.style.height = 'auto';
+  sheet.style.zoom = '';
+  const naturalPx = sheet.getBoundingClientRect().height;
+  const maxPx = PRINT_MAX_HEIGHT_MM * 96 / 25.4;
+  if(naturalPx > maxPx) sheet.style.zoom = String(maxPx / naturalPx);
+});
+window.addEventListener('afterprint', ()=>{
+  const sheet = document.getElementById('sheet');
+  if(!sheet || !printFitSaved) return;
+  sheet.style.width = printFitSaved.width;
+  sheet.style.height = printFitSaved.height;
+  sheet.style.aspectRatio = printFitSaved.aspect;
+  sheet.style.transform = printFitSaved.transform;
+  sheet.style.zoom = printFitSaved.zoom;
+  printFitSaved = null;
+});
