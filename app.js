@@ -504,6 +504,25 @@ function showRecoveryScreen(){
   document.getElementById('appRoot').classList.add('hidden');
 }
 
+// Supabase's updateUser() errors are useful but in English and sometimes
+// cryptic (e.g. the session simply expired) — translate the common ones,
+// and for anything else show the real message instead of a generic one so
+// we're not guessing blind next time something fails.
+function translateAuthError(error){
+  const msg = (error && error.message) || '';
+  const lower = msg.toLowerCase();
+  if(lower.includes('different from the old password')){
+    return 'La contraseña nueva debe ser distinta a la anterior.';
+  }
+  if(lower.includes('at least') && lower.includes('character')){
+    return 'La contraseña es muy corta para Supabase. Prueba con una de al menos 8 caracteres.';
+  }
+  if(lower.includes('expired') || lower.includes('invalid') || lower.includes('session')){
+    return 'El enlace ya expiró o ya se usó. Pide uno nuevo con "¿Olvidaste tu contraseña?".';
+  }
+  return msg ? `No se pudo actualizar la contraseña: ${msg}` : 'No se pudo actualizar la contraseña. Pide un nuevo enlace e intenta de nuevo.';
+}
+
 async function doSetNewPassword(){
   const pw1 = document.getElementById('recoveryPassword').value;
   const pw2 = document.getElementById('recoveryPassword2').value;
@@ -519,7 +538,7 @@ async function doSetNewPassword(){
   const { error } = await sb.auth.updateUser({ password: pw1 });
   btn.disabled = false;
   btn.textContent = 'Guardar contraseña';
-  if(error){ errEl.textContent = 'No se pudo actualizar la contraseña. Pide un nuevo enlace e intenta de nuevo.'; return; }
+  if(error){ errEl.textContent = translateAuthError(error); return; }
   okEl.classList.remove('hidden');
   document.getElementById('recoveryPassword').value = '';
   document.getElementById('recoveryPassword2').value = '';
