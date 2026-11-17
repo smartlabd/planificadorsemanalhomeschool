@@ -320,6 +320,9 @@ function renderWeeksMenuList(weeks){
   menu.querySelectorAll('.del').forEach(del=>{
     del.addEventListener('click', async (e)=>{
       e.stopPropagation();
+      const week = weeks.find(w=>w.id===del.dataset.del);
+      const label = week ? 'Semana ' + String(week.week).padStart(2,'0') : 'esta semana';
+      if(!confirm(`¿Eliminar ${label}? Esta acción no se puede deshacer.`)) return;
       await deleteWeek(del.dataset.del);
       const fresh = await loadWeeks();
       renderWeeksMenuList(fresh);
