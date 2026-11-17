@@ -243,7 +243,7 @@ function watchSheetFit(frameId, sheetId){
 
 // Letter portrait with 10mm margins leaves 259.4mm of height; keep a little
 // safety so rounding never pushes the last row onto a second page.
-const PRINT_MAX_HEIGHT_MM = 255;
+const PRINT_MAX_HEIGHT_MM = 258;
 let printFitSaved = null;
 window.addEventListener('beforeprint', ()=>{
   const sheet = document.getElementById('sheet');
